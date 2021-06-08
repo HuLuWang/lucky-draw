@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package user.service.v1;
+
+option go_package = "lucky-draw/user/service/cmd;cmd";
+option java_multiple_files = true;
+option java_package = "user.service.cmd";
+
+service User {
+  // userinfo
+  rpc CreateUser (CreateUserReq) returns (CreateUserReply);
+  rpc UpdateUser (UpdateUserReq) returns (UpdateUserReply);
+  rpc GetUser (GetUserReq) returns (GetUserReply);
+  rpc VerifyPassword (VerifyPasswordReq) returns (VerifyPasswordReply);
+  // address 
+  rpc CreateAddress (CreateAddressReq) returns (CreateAddressReply);
+  rpc UpdateAddress (UpdateAddressReq) returns (UpdateAddressReply);
+  rpc DeleteAddress (DeleteAddressReq) returns (DeleteAddressReply);
+  rpc ListAddress (ListAddressReq) returns (ListAddressReply);
+}
+
+message UserInfo {
+  int64 id = 1;
+  string nickname = 2;
+  string mobile = 3;
+  string avatar = 4;
+}
+
+message Address {
+  int64 id = 1;
+  int64 uid = 2;
+  string username = 3;
+  string mobile = 4;
+  string address = 5;
+}
+
+message CreateUserReq {
+  string nickname = 1;
+  string mobile = 2;
+  string password = 3;
+}
+
+message CreateUserReply {
+  int64 id = 1;
+}
+
+message UpdateUserReq {
+  string avatar = 1;
+  string nickname = 2;
+  string mobile = 3;
+}
+
+message UpdateUserReply {
+  UserInfo res = 1;
+}
+
+message GetUserReq {
+  int64 id = 1;
+}
+
+message GetUserReply {
+  UserInfo res = 1;
+}
+
+message VerifyPasswordReq {
+  string mobile = 1;
+  string password = 2;
+}
+
+message VerifyPasswordReply {
+  bool  ok = 1;
+  int64 id = 2;
+  string token = 3;
+}
+
+message CreateAddressReq {
+  string username = 1;
+  string mobile = 2;
+  string address = 3;
+}
+
+message CreateAddressReply {
+  int64 id = 1;
+}
+
+message UpdateAddressReq {
+  int64 id = 1;
+  string username = 2;
+  string mobile = 3;
+  string address = 4;
+}
+
+message UpdateAddressReply {
+  Address address = 1;
+}
+
+message DeleteAddressReq {
+  int64 id = 1;
+}
+
+message DeleteAddressReply {
+  bool ok = 1;
+}
+
+message ListAddressReq {
+  int64 uid = 1;
+}
+
+message ListAddressReply {
+  repeated Address results = 1;
+}
