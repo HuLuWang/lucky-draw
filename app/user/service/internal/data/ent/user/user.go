@@ -13,6 +13,8 @@ const (
 	FieldID = "id"
 	// FieldNickname holds the string denoting the nickname field in the database.
 	FieldNickname = "nickname"
+	// FieldMobile holds the string denoting the mobile field in the database.
+	FieldMobile = "mobile"
 	// FieldAvatar holds the string denoting the avatar field in the database.
 	FieldAvatar = "avatar"
 	// FieldPasswordHash holds the string denoting the password_hash field in the database.
@@ -38,6 +40,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldNickname,
+	FieldMobile,
 	FieldAvatar,
 	FieldPasswordHash,
 	FieldCreatedAt,

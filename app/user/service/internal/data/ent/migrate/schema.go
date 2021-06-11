@@ -37,6 +37,7 @@ var (
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt64, Increment: true},
 		{Name: "nickname", Type: field.TypeString},
+		{Name: "mobile", Type: field.TypeString},
 		{Name: "avatar", Type: field.TypeString},
 		{Name: "password_hash", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "datetime"}},

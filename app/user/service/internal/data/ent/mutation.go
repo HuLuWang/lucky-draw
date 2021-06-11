@@ -702,6 +702,7 @@ type UserMutation struct {
 	typ            string
 	id             *int64
 	nickname       *string
+	mobile         *string
 	avatar         *string
 	password_hash  *string
 	created_at     *time.Time
@@ -834,6 +835,42 @@ func (m *UserMutation) OldNickname(ctx context.Context) (v string, err error) {
 // ResetNickname resets all changes to the "nickname" field.
 func (m *UserMutation) ResetNickname() {
 	m.nickname = nil
+}
+
+// SetMobile sets the "mobile" field.
+func (m *UserMutation) SetMobile(s string) {
+	m.mobile = &s
+}
+
+// Mobile returns the value of the "mobile" field in the mutation.
+func (m *UserMutation) Mobile() (r string, exists bool) {
+	v := m.mobile
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMobile returns the old "mobile" field's value of the User entity.
+// If the User object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *UserMutation) OldMobile(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldMobile is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldMobile requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMobile: %w", err)
+	}
+	return oldValue.Mobile, nil
+}
+
+// ResetMobile resets all changes to the "mobile" field.
+func (m *UserMutation) ResetMobile() {
+	m.mobile = nil
 }
 
 // SetAvatar sets the "avatar" field.
@@ -1047,9 +1084,12 @@ func (m *UserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *UserMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 6)
 	if m.nickname != nil {
 		fields = append(fields, user.FieldNickname)
+	}
+	if m.mobile != nil {
+		fields = append(fields, user.FieldMobile)
 	}
 	if m.avatar != nil {
 		fields = append(fields, user.FieldAvatar)
@@ -1073,6 +1113,8 @@ func (m *UserMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case user.FieldNickname:
 		return m.Nickname()
+	case user.FieldMobile:
+		return m.Mobile()
 	case user.FieldAvatar:
 		return m.Avatar()
 	case user.FieldPasswordHash:
@@ -1092,6 +1134,8 @@ func (m *UserMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case user.FieldNickname:
 		return m.OldNickname(ctx)
+	case user.FieldMobile:
+		return m.OldMobile(ctx)
 	case user.FieldAvatar:
 		return m.OldAvatar(ctx)
 	case user.FieldPasswordHash:
@@ -1115,6 +1159,13 @@ func (m *UserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetNickname(v)
+		return nil
+	case user.FieldMobile:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMobile(v)
 		return nil
 	case user.FieldAvatar:
 		v, ok := value.(string)
@@ -1195,6 +1246,9 @@ func (m *UserMutation) ResetField(name string) error {
 	switch name {
 	case user.FieldNickname:
 		m.ResetNickname()
+		return nil
+	case user.FieldMobile:
+		m.ResetMobile()
 		return nil
 	case user.FieldAvatar:
 		m.ResetAvatar()

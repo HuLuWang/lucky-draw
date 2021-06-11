@@ -18,6 +18,7 @@ func (User) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int64("id"),
 		field.String("nickname"),
+		field.String("mobile"),
 		field.String("avatar"),
 		field.String("password_hash"),
 		field.Time("created_at").Default(time.Now).

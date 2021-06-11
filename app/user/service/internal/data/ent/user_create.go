@@ -27,6 +27,12 @@ func (uc *UserCreate) SetNickname(s string) *UserCreate {
 	return uc
 }
 
+// SetMobile sets the "mobile" field.
+func (uc *UserCreate) SetMobile(s string) *UserCreate {
+	uc.mutation.SetMobile(s)
+	return uc
+}
+
 // SetAvatar sets the "avatar" field.
 func (uc *UserCreate) SetAvatar(s string) *UserCreate {
 	uc.mutation.SetAvatar(s)
@@ -155,6 +161,9 @@ func (uc *UserCreate) check() error {
 	if _, ok := uc.mutation.Nickname(); !ok {
 		return &ValidationError{Name: "nickname", err: errors.New("ent: missing required field \"nickname\"")}
 	}
+	if _, ok := uc.mutation.Mobile(); !ok {
+		return &ValidationError{Name: "mobile", err: errors.New("ent: missing required field \"mobile\"")}
+	}
 	if _, ok := uc.mutation.Avatar(); !ok {
 		return &ValidationError{Name: "avatar", err: errors.New("ent: missing required field \"avatar\"")}
 	}
@@ -207,6 +216,14 @@ func (uc *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			Column: user.FieldNickname,
 		})
 		_node.Nickname = value
+	}
+	if value, ok := uc.mutation.Mobile(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldMobile,
+		})
+		_node.Mobile = value
 	}
 	if value, ok := uc.mutation.Avatar(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

@@ -34,6 +34,12 @@ func (uu *UserUpdate) SetNickname(s string) *UserUpdate {
 	return uu
 }
 
+// SetMobile sets the "mobile" field.
+func (uu *UserUpdate) SetMobile(s string) *UserUpdate {
+	uu.mutation.SetMobile(s)
+	return uu
+}
+
 // SetAvatar sets the "avatar" field.
 func (uu *UserUpdate) SetAvatar(s string) *UserUpdate {
 	uu.mutation.SetAvatar(s)
@@ -191,6 +197,13 @@ func (uu *UserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: user.FieldNickname,
 		})
 	}
+	if value, ok := uu.mutation.Mobile(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldMobile,
+		})
+	}
 	if value, ok := uu.mutation.Avatar(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
@@ -295,6 +308,12 @@ type UserUpdateOne struct {
 // SetNickname sets the "nickname" field.
 func (uuo *UserUpdateOne) SetNickname(s string) *UserUpdateOne {
 	uuo.mutation.SetNickname(s)
+	return uuo
+}
+
+// SetMobile sets the "mobile" field.
+func (uuo *UserUpdateOne) SetMobile(s string) *UserUpdateOne {
+	uuo.mutation.SetMobile(s)
 	return uuo
 }
 
@@ -477,6 +496,13 @@ func (uuo *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) 
 			Type:   field.TypeString,
 			Value:  value,
 			Column: user.FieldNickname,
+		})
+	}
+	if value, ok := uuo.mutation.Mobile(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  value,
+			Column: user.FieldMobile,
 		})
 	}
 	if value, ok := uuo.mutation.Avatar(); ok {
