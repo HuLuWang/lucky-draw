@@ -33,6 +33,8 @@ type UserHandler interface {
 	UpdateAddress(context.Context, *UpdateAddressReq) (*UpdateAddressReply, error)
 
 	UpdateUser(context.Context, *UpdateUserReq) (*UpdateUserReply, error)
+
+	VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordReply, error)
 }
 
 func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
@@ -109,6 +111,30 @@ func NewUserHandler(srv UserHandler, opts ...http1.HandleOption) http.Handler {
 			return
 		}
 		reply := out.(*GetUserReply)
+		if err := h.Encode(w, r, reply); err != nil {
+			h.Error(w, r, err)
+		}
+	}).Methods("POST")
+
+	r.HandleFunc("/user.service.v1.User/VerifyPassword", func(w http.ResponseWriter, r *http.Request) {
+		var in VerifyPasswordReq
+		if err := h.Decode(r, &in); err != nil {
+			h.Error(w, r, err)
+			return
+		}
+
+		next := func(ctx context.Context, req interface{}) (interface{}, error) {
+			return srv.VerifyPassword(ctx, req.(*VerifyPasswordReq))
+		}
+		if h.Middleware != nil {
+			next = h.Middleware(next)
+		}
+		out, err := next(r.Context(), &in)
+		if err != nil {
+			h.Error(w, r, err)
+			return
+		}
+		reply := out.(*VerifyPasswordReply)
 		if err := h.Encode(w, r, reply); err != nil {
 			h.Error(w, r, err)
 		}
@@ -227,6 +253,8 @@ type UserHTTPClient interface {
 	UpdateAddress(ctx context.Context, req *UpdateAddressReq, opts ...http1.CallOption) (rsp *UpdateAddressReply, err error)
 
 	UpdateUser(ctx context.Context, req *UpdateUserReq, opts ...http1.CallOption) (rsp *UpdateUserReply, err error)
+
+	VerifyPassword(ctx context.Context, req *VerifyPasswordReq, opts ...http1.CallOption) (rsp *VerifyPasswordReply, err error)
 }
 
 type UserHTTPClientImpl struct {
@@ -296,6 +324,15 @@ func (c *UserHTTPClientImpl) UpdateUser(ctx context.Context, in *UpdateUserReq, 
 	out = &UpdateUserReply{}
 
 	err = c.cc.Invoke(ctx, path, nil, &out, http1.Method("POST"), http1.PathPattern("/user.service.v1.User/UpdateUser"))
+
+	return
+}
+
+func (c *UserHTTPClientImpl) VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...http1.CallOption) (out *VerifyPasswordReply, err error) {
+	path := binding.EncodePath("POST", "/user.service.v1.User/VerifyPassword", in)
+	out = &VerifyPasswordReply{}
+
+	err = c.cc.Invoke(ctx, path, nil, &out, http1.Method("POST"), http1.PathPattern("/user.service.v1.User/VerifyPassword"))
 
 	return
 }

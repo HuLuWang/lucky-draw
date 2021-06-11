@@ -45,9 +45,10 @@ message CreateUserReply {
 }
 
 message UpdateUserReq {
-  string avatar = 1;
-  string nickname = 2;
-  string mobile = 3;
+  int64 id = 1;
+  string avatar = 2;
+  string nickname = 3;
+  string mobile = 4;
 }
 
 message UpdateUserReply {

@@ -14,6 +14,13 @@ type addressRepo struct {
 	log  *log.Helper
 }
 
+func NewAddressRepo(data *Data, logger log.Logger) biz.AddressRepo {
+	return &addressRepo{
+		data: data,
+		log:  log.NewHelper(log.With(logger, "module", "data/user-service")),
+	}
+}
+
 func (r *addressRepo) CreateAddress(ctx context.Context, a *biz.Address) (*biz.Address, error) {
 	po, err := r.data.db.Address.
 		Create().

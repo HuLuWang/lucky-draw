@@ -22,6 +22,7 @@ type UserClient interface {
 	CreateUser(ctx context.Context, in *CreateUserReq, opts ...grpc.CallOption) (*CreateUserReply, error)
 	UpdateUser(ctx context.Context, in *UpdateUserReq, opts ...grpc.CallOption) (*UpdateUserReply, error)
 	GetUser(ctx context.Context, in *GetUserReq, opts ...grpc.CallOption) (*GetUserReply, error)
+	VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordReply, error)
 	// address
 	CreateAddress(ctx context.Context, in *CreateAddressReq, opts ...grpc.CallOption) (*CreateAddressReply, error)
 	UpdateAddress(ctx context.Context, in *UpdateAddressReq, opts ...grpc.CallOption) (*UpdateAddressReply, error)
@@ -58,6 +59,15 @@ func (c *userClient) UpdateUser(ctx context.Context, in *UpdateUserReq, opts ...
 func (c *userClient) GetUser(ctx context.Context, in *GetUserReq, opts ...grpc.CallOption) (*GetUserReply, error) {
 	out := new(GetUserReply)
 	err := c.cc.Invoke(ctx, "/user.service.v1.User/GetUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userClient) VerifyPassword(ctx context.Context, in *VerifyPasswordReq, opts ...grpc.CallOption) (*VerifyPasswordReply, error) {
+	out := new(VerifyPasswordReply)
+	err := c.cc.Invoke(ctx, "/user.service.v1.User/VerifyPassword", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,6 +118,7 @@ type UserServer interface {
 	CreateUser(context.Context, *CreateUserReq) (*CreateUserReply, error)
 	UpdateUser(context.Context, *UpdateUserReq) (*UpdateUserReply, error)
 	GetUser(context.Context, *GetUserReq) (*GetUserReply, error)
+	VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordReply, error)
 	// address
 	CreateAddress(context.Context, *CreateAddressReq) (*CreateAddressReply, error)
 	UpdateAddress(context.Context, *UpdateAddressReq) (*UpdateAddressReply, error)
@@ -128,6 +139,9 @@ func (UnimplementedUserServer) UpdateUser(context.Context, *UpdateUserReq) (*Upd
 }
 func (UnimplementedUserServer) GetUser(context.Context, *GetUserReq) (*GetUserReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUser not implemented")
+}
+func (UnimplementedUserServer) VerifyPassword(context.Context, *VerifyPasswordReq) (*VerifyPasswordReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method VerifyPassword not implemented")
 }
 func (UnimplementedUserServer) CreateAddress(context.Context, *CreateAddressReq) (*CreateAddressReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAddress not implemented")
@@ -204,6 +218,24 @@ func _User_GetUser_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServer).GetUser(ctx, req.(*GetUserReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _User_VerifyPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyPasswordReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).VerifyPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.service.v1.User/VerifyPassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).VerifyPassword(ctx, req.(*VerifyPasswordReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -298,6 +330,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUser",
 			Handler:    _User_GetUser_Handler,
+		},
+		{
+			MethodName: "VerifyPassword",
+			Handler:    _User_VerifyPassword_Handler,
 		},
 		{
 			MethodName: "CreateAddress",
