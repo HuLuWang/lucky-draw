@@ -75,9 +75,10 @@ message VerifyPasswordReply {
 }
 
 message CreateAddressReq {
-  string username = 1;
-  string mobile = 2;
-  string address = 3;
+  int64  uid = 1;
+  string username = 2;
+  string mobile = 3;
+  string address = 4;
 }
 
 message CreateAddressReply {
