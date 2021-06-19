@@ -151,12 +151,12 @@ type ValidationError struct {
 	err  error
 }
 
-// Error implements the error interface.
+// Error implements the error server.
 func (e *ValidationError) Error() string {
 	return e.err.Error()
 }
 
-// Unwrap implements the errors.Wrapper interface.
+// Unwrap implements the errors.Wrapper server.
 func (e *ValidationError) Unwrap() error {
 	return e.err
 }
@@ -175,7 +175,7 @@ type NotFoundError struct {
 	label string
 }
 
-// Error implements the error interface.
+// Error implements the error server.
 func (e *NotFoundError) Error() string {
 	return "ent: " + e.label + " not found"
 }
@@ -202,7 +202,7 @@ type NotSingularError struct {
 	label string
 }
 
-// Error implements the error interface.
+// Error implements the error server.
 func (e *NotSingularError) Error() string {
 	return "ent: " + e.label + " not singular"
 }
@@ -221,7 +221,7 @@ type NotLoadedError struct {
 	edge string
 }
 
-// Error implements the error interface.
+// Error implements the error server.
 func (e *NotLoadedError) Error() string {
 	return "ent: " + e.edge + " edge was not loaded"
 }
@@ -243,12 +243,12 @@ type ConstraintError struct {
 	wrap error
 }
 
-// Error implements the error interface.
+// Error implements the error server.
 func (e ConstraintError) Error() string {
 	return "ent: constraint failed: " + e.msg
 }
 
-// Unwrap implements the errors.Wrapper interface.
+// Unwrap implements the errors.Wrapper server.
 func (e *ConstraintError) Unwrap() error {
 	return e.wrap
 }

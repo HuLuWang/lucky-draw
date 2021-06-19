@@ -158,7 +158,7 @@ func (UnimplementedUserServer) ListAddress(context.Context, *ListAddressReq) (*L
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
 // UnsafeUserServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to UserServer will
+// Use of this server is not recommended, as added methods to UserServer will
 // result in compilation errors.
 type UnsafeUserServer interface {
 	mustEmbedUnimplementedUserServer()

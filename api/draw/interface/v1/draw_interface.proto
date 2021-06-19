@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package draw.interface.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "lucky-draw/draw/server/v1;v1";
+
+service DrawInterface {
+
+}
+
+message RegisterReq {
+  string mobile = 1;
+  string password = 2;
+}
+
+message RegisterReply {
+    int64 id = 1;
+}
+
+message LoginReq {
+    string mobile = 1;
+    string password = 2;
+}
+
+message LoginReply {
+    string id = 1;
+    string token = 2;
+}
+
+message LogoutReq {
+    int64 id = 1;
+}
+
+message LogoutReply {
+    bool ok = 1;
+}
+
+message ListAddressReq {
+    int64 uid = 1;
+}
+
+message ListAddressReply {
+    message Address {
+        int64 id = 1;
+        string username = 2;
+        string mobile = 3;
+        string address = 4;
+    }
+    repeated Address results = 1;
+}
+
+message CreateAddressReq {
+    int64 uid = 1;
+    string username = 2;
+    string mobile = 3;
+    string address = 4;
+}
+
+message CreateAddressReply {
+    int64 id = 1;
+    int64 uid = 2;
+    string username = 3;
+    string mobile = 4;
+    string address = 5;
+}
+
+message GetAddressReq {
+    int64 id = 1;
+}
+
+message GetAddressReply {
+    int64 id = 1;
+    int64 uid = 2;
+    string username = 3;
+    string mobile = 4;
+    string address = 5;
+}
+
+message DeleteAddressReq {
+    int64 id = 1;
+}
+
+message DeleteAddressReply {
+    bool ok = 1;
+}
+

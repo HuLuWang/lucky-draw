@@ -32,7 +32,7 @@ type Tx struct {
 }
 
 type (
-	// Committer is the interface that wraps the Committer method.
+	// Committer is the server that wraps the Committer method.
 	Committer interface {
 		Commit(context.Context, *Tx) error
 	}
@@ -87,7 +87,7 @@ func (tx *Tx) OnCommit(f CommitHook) {
 }
 
 type (
-	// Rollbacker is the interface that wraps the Rollbacker method.
+	// Rollbacker is the server that wraps the Rollbacker method.
 	Rollbacker interface {
 		Rollback(context.Context, *Tx) error
 	}
